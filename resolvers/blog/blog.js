@@ -4,7 +4,7 @@ import { ErrorResponse } from "../../utils/ErrorResponse";
 
 export const createBlog = async (
   _,
-  { creator, title, content, coverPhoto }
+  { creator, title, content, isPrivate, coverPhoto }
 ) => {
   try {
     const creatorValidation = await User.findOne({ _id: creator });
@@ -24,7 +24,7 @@ export const createBlog = async (
 
     const blogData = await Blog.create({
       creator,
-      // private,
+      isPrivate,
       title,
       content,
       coverPhoto,
@@ -96,6 +96,7 @@ export const getBlogByTitle = async (_, { title }) => {
     const normalTitle = title.split("-").join(" ");
     const blogData = await Blog.findOne({
       title: { $regex: normalTitle, $options: "i" },
+      isPrivate: false,
     }).populate("creator");
     if (blogData) {
       return {
@@ -111,11 +112,11 @@ export const getBlogByTitle = async (_, { title }) => {
 };
 
 export const allBlogs = async (_, { title }) => {
-  const search = {};
+  const search = { isPrivate: false };
   if (title) {
     search.title = { $regex: title, $options: "i" };
   }
-  const blogs = await Blog.find(search).populate("creator");
+  const blogs = await Blog.find(search).sort({ likes: -1 }).populate("creator");
   return {
     success: true,
     blogs,

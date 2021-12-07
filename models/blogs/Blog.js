@@ -7,7 +7,7 @@ const BlogSchema = new mongoose.Schema(
       ref: "User",
       require: [true, "Please provide creator id"],
     },
-    private: {
+    isPrivate: {
       type: Boolean,
       default: false,
     },

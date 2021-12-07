@@ -1,0 +1,21 @@
+.published {
+  font-size: smaller;
+  opacity: 0.6;
+}
+.cardFooter {
+  padding: 10px;
+  h1 {
+    font-weight: bolder;
+    margin-bottom: -10px;
+  }
+  a {
+    color: black;
+  }
+  .likes {
+    display: flex;
+    align-items: center;
+    svg {
+      font-size: 20px;
+    }
+  }
+}

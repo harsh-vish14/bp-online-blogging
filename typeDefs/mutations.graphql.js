@@ -23,7 +23,7 @@ export const Mutations = gql`
     addBlog(
       creator: ID!
       coverPhoto: String!
-      private: Boolean
+      isPrivate: Boolean
       title: String!
       content: String!
     ): DetailsResponseBlog
@@ -31,7 +31,7 @@ export const Mutations = gql`
     updateBlog(
       id: ID!
       coverPhoto: String!
-      private: Boolean
+      isPrivate: Boolean
       title: String!
       content: String!
     ): DetailsResponseBlog

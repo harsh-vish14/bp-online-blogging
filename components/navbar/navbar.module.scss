@@ -1,0 +1,17 @@
+.logo {
+  font-size: 30px;
+  font-weight: 900;
+  color: #000;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+  .nav {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-size: 18px;
+  }
+}

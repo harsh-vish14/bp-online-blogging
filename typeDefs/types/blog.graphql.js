@@ -9,7 +9,7 @@ export const Blog = gql`
     creator: User!
 
     "is creator is setting the blog to private"
-    private: Boolean!
+    isPrivate: Boolean!
 
     "title of the blog"
     title: String!

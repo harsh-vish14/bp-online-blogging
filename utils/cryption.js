@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 /**
  * @description it helps to hash the password

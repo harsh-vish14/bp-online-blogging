@@ -1,10 +1,8 @@
-const { ApolloError } = require("apollo-server-errors");
+import { ApolloError } from "apollo-server-errors";
 
-class ErrorResponse extends ApolloError {
+export class ErrorResponse extends ApolloError {
   constructor(message, code) {
     super(message, code);
     Object.defineProperty(this, "name", { value: "ErrorResponse" });
   }
 }
-
-module.exports = { ErrorResponse };
