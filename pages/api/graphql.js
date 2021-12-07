@@ -2,12 +2,26 @@ import { ApolloServer } from "apollo-server-micro";
 import { typeDefs } from "../../typeDefs/index";
 import { resolvers } from "../../resolvers/index";
 import { connectDB } from "../../config/db";
+import {
+  ApolloServerPluginLandingPageProductionDefault,
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageDisabled,
+} from "apollo-server-core";
 
 (async () => {
   await connectDB();
 })();
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+    ApolloServerPluginLandingPageDisabled(),
+  ],
+});
 
 const startServer = apolloServer.start();
 
