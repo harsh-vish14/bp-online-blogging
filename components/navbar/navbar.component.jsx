@@ -3,9 +3,13 @@ import React from "react";
 import classes from "./navbar.module.scss";
 import { useSession } from "next-auth/client";
 import { Button } from "antd";
+import { MenuComponent } from "../menu/menu.components";
 
 export const Navbar = () => {
   const [session, loading] = useSession();
+  React.useEffect(() => {
+    console.log(session);
+  }, [session]);
   return (
     <div className={classes.navbar}>
       <nav>
@@ -24,7 +28,7 @@ export const Navbar = () => {
             </a>
           </Link>
         ) : (
-          <div>WOW you have login</div>
+          <MenuComponent />
         )}
       </nav>
     </div>

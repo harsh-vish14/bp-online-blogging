@@ -41,15 +41,24 @@ body::-webkit-scrollbar-thumb {
   border-radius: 2px; /* roundness of the scroll thumb */
   // border: 3px solid rgb(29, 29, 29); /* creates padding around scroll thumb */
 }
-.ant-input-affix-wrapper-focused {
-  box-shadow: 0px 0px 11px 0px #0000002b !important;
-}
+.main_main__rPAsL {
+  .ant-input-affix-wrapper-focused {
+    box-shadow: 0px 0px 11px 0px #0000002b !important;
+  }
 
-.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
-  border-color: #40a9ff;
-  border-right-width: 1px !important;
-  z-index: 1;
-  border: none;
+  .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover {
+    border-color: #40a9ff;
+    border-right-width: 1px !important;
+    z-index: 1;
+    border: none;
+  }
+
+  .ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled) {
+    border-color: #40a9ff;
+    border-right-width: 1px !important;
+    z-index: 1;
+    border: none;
+  }
 }
 
 img {

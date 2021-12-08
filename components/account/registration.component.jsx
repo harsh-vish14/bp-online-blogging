@@ -5,14 +5,29 @@ import classes from "./account.module.scss";
 import Link from "next/link";
 import { createNotification } from "../../utils/createNotification";
 import ImgCrop from "antd-img-crop";
+import { uploadImages } from "../../utils/uploadImages";
+import { useRouter } from "next/router";
 
 const { TextArea } = Input;
 
 export const Registration = () => {
+  const router = useRouter();
   const [form] = Form.useForm();
   const [image, setImage] = React.useState(null);
   const [fileList, setFileList] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
+  const [imageUrl, setImageUrl] = React.useState();
+
+  React.useEffect(() => {
+    // if (imageUrl) {
+    //   createNotification(
+    //     "Account Created",
+    //     "Account created successfully, now user can login",
+    //     "success"
+    //   );
+    // }
+    console.log("imageUrl: ", imageUrl);
+  }, [imageUrl]);
 
   const layout = {
     labelCol: {
@@ -23,7 +38,7 @@ export const Registration = () => {
     },
   };
 
-  const onSubmit = (values) => {
+  const onSubmit = async (values) => {
     setLoading(true);
     if (values.password !== values.confirmPassword) {
       console.log("Error found: ", values.password, values.confirmPassword);
@@ -46,13 +61,11 @@ export const Registration = () => {
       return;
     }
     console.log(values, image);
-    form.resetFields();
-    setFileList([]);
-    createNotification(
-      "Account Created",
-      "Account created successfully, now user can login",
-      "success"
-    );
+    await uploadImages(image, "image/", setImageUrl);
+    setLoading(false);
+    router.back();
+    // form.resetFields();
+    // setFileList([]);
   };
 
   const action = (as) => {
