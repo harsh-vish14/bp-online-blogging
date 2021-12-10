@@ -6,6 +6,11 @@ export const Queries = gql`
     getUserBlogs(username: String!): UserBlogs
     getBlogByTitle(title: String!): BlogMainTitleSearchResponse
     allBlogs(title: String): BlogSearchFilterResponse
+    commentsByBlogId(
+      blogId: String!
+      sliceStart: Int!
+      slice: Int!
+    ): DetailsResponseComments
   }
 
   type BlogMainTitleSearchResponse {

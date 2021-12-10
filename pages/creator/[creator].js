@@ -5,7 +5,7 @@ export default ({ username, myProfile }) => {
   console.log({ username, myProfile });
   return (
     <div>
-      creator details: {username}, {myProfile}{" "}
+      creator details: {username}, {myProfile}
     </div>
   );
 };

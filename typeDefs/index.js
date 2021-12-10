@@ -29,4 +29,10 @@ export const typeDefs = gql`
     message: String
     blog: Blog
   }
+
+  type DetailsResponseComments {
+    success: Boolean!
+    message: String
+    comments: [Comment]
+  }
 `;

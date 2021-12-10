@@ -4,6 +4,9 @@ import {
   deleteBlog,
   getBlogByTitle,
   allBlogs,
+  commentsByBlogId,
+  addCommentToBlog,
+  deleteComment,
 } from "./blog/blog";
 import { createUser, updateUser, loginUser, getUserBlogs } from "./user/user";
 
@@ -13,6 +16,7 @@ export const resolvers = {
     getUserBlogs,
     getBlogByTitle,
     allBlogs,
+    commentsByBlogId,
   },
 
   Mutation: {
@@ -21,5 +25,7 @@ export const resolvers = {
     addBlog: createBlog,
     updateBlog,
     deleteBlog,
+    addCommentToBlog,
+    deleteComment,
   },
 };

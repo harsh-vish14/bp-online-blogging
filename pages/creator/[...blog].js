@@ -4,6 +4,7 @@ import { Blog } from "../../models/blogs/Blog";
 import ErrorPage from "next/error";
 import { useSession } from "next-auth/client";
 import React from "react";
+import { BlogCompo } from "../../components/blog/blog.component";
 
 export default ({ blogData }) => {
   const [session, loading] = useSession();
@@ -26,8 +27,7 @@ export default ({ blogData }) => {
   if (errorFound) {
     return <ErrorPage statusCode={404} />;
   }
-
-  return <div>Blog details {blogData.title}</div>;
+  return <BlogCompo blog={blogData} />;
 };
 
 export const getStaticProps = async (context) => {

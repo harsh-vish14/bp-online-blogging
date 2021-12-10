@@ -1,0 +1,43 @@
+.blogMain {
+  margin: 0px 20px;
+  main {
+    margin: 30px 20px;
+    /* transform: scale(1.03); */
+    font-size: 16px;
+  }
+  margin-bottom: 20px;
+}
+.titleImage {
+  position: relative;
+  min-height: 300px;
+  img {
+    height: 300px;
+    min-height: 150px;
+  }
+}
+.BlogTitle {
+  font-size: 40px;
+  text-transform: uppercase;
+  margin-top: auto;
+  font-weight: bolder;
+  text-align: center;
+}
+.creator {
+  display: flex;
+  gap: 6px;
+  font-weight: 800;
+  width: fit-content;
+  /* background: aqua; */
+  margin-top: 10px;
+  .name {
+    text-transform: capitalize;
+    .username {
+      text-transform: none;
+    }
+  }
+}
+.creatorLink {
+  a {
+    color: black;
+  }
+}

@@ -36,6 +36,15 @@ export const Mutations = gql`
       content: String!
     ): DetailsResponseBlog
 
+    addCommentToBlog(
+      blogId: String!
+      message: String!
+      userId: String!
+      slice: Int!
+    ): MessageResponse
+
+    deleteComment(commentId: String!): MessageResponse
+
     deleteBlog(id: ID!): MessageResponse
   }
 `;
