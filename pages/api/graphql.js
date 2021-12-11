@@ -6,12 +6,17 @@ import {
   ApolloServerPluginLandingPageProductionDefault,
   ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
+import { getSession } from "next-auth/client";
 
 (async () => {
   await connectDB();
 })();
 
 const apolloServer = new ApolloServer({
+  context: async ({ req }) => {
+    const session = await getSession({ req });
+    return { session: session || null };
+  },
   typeDefs,
   resolvers,
   plugins: [

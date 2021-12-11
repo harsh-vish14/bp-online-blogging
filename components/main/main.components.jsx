@@ -46,8 +46,8 @@ export const Main = () => {
         <Query query={GET_BLOGS_BY_TITLE} variables={{ title: search }}>
           {({ loading, data }) => {
             if (loading) return <Spinner />;
-            console.log(data?.allBlogs?.blogs);
-            return <CardContainer blogs={data?.allBlogs?.blogs || []} />;
+            console.log(data.allBlogs.blogs);
+            return <CardContainer blogs={data?.allBlogs?.blogs} />;
           }}
         </Query>
       </div>

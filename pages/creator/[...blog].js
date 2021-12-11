@@ -54,7 +54,7 @@ export const getStaticProps = async (context) => {
 
   const blogData = await Blog.findOne(
     {
-      title: { $regex: normalTitle, $options: "i" },
+      title: normalTitle,
     },
     { comments: 0, createdAt: 0 }
   ).populate("creator", "name username profileImage");

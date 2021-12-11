@@ -19,6 +19,10 @@ const client = new ApolloClient({
   cache,
 });
 
+cache.writeData({
+  data: {},
+});
+
 function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <ApolloProvider client={client}>

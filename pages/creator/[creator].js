@@ -1,14 +1,18 @@
-import { getSession } from "next-auth/client";
+import { getSession, useSession } from "next-auth/client";
 import { Creator } from "../../components/creator/creator.components";
 import { User } from "../../models/user/User";
 
-export default ({ username, myProfile, userData }) => {
-  // console.log({ username, myProfile, userData });
-  return <Creator userData={userData} myProfile={myProfile} />;
+export default ({ userData }) => {
+  const [session, loading] = useSession();
+  return (
+    <Creator
+      userData={userData}
+      myProfile={!loading && session && session.user.id == String(userData._id)}
+    />
+  );
 };
 
 export const getStaticProps = async (context) => {
-  const session = await getSession(context);
   const { creator } = context.params;
   const username = creator.split("@").join("");
   const userData = await User.findOne(
@@ -22,8 +26,6 @@ export const getStaticProps = async (context) => {
   }
   return {
     props: {
-      username,
-      myProfile: String(userData?._id) === session?.user?.id || false,
       userData: JSON.parse(JSON.stringify(userData)),
     },
   };

@@ -27,7 +27,7 @@ export const typeDefs = gql`
   type DetailsResponseBlog {
     success: Boolean!
     message: String
-    blog: Blog
+    blog: [Blog]
   }
 
   type DetailsResponseComments {

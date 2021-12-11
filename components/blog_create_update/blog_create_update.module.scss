@@ -1,0 +1,46 @@
+.editor {
+  height: 90vh;
+}
+.titleImage {
+  position: relative;
+  min-height: 300px;
+  img {
+    height: 300px;
+    min-height: 150px;
+  }
+  .editBackground {
+    //   z-index: 4;
+    color: white;
+    position: relative;
+    background: #000000a6;
+    height: 300px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    letter-spacing: 2px;
+    opacity: 0;
+    transition: 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    cursor: pointer;
+  }
+  &:hover {
+    .editBackground {
+      transition: 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      opacity: 1;
+    }
+  }
+}
+.title {
+  margin: 10px;
+  input {
+    padding: 10px;
+  }
+  font-size: 30px;
+}
+.btns {
+  display: flex;
+  margin: 10px 20px;
+  justify-content: space-between;
+  align-items: center;
+}

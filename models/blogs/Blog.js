@@ -26,7 +26,8 @@ const BlogSchema = new mongoose.Schema(
     },
     coverPhoto: {
       type: String,
-      require: [true, "Please provide a cover photo"],
+      default:
+        "https://images.unsplash.com/photo-1620503374956-c942862f0372?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=100",
     },
   },
   { timestamps: true }

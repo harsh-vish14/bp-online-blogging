@@ -56,9 +56,9 @@ export const CardComponent = ({
                   <a>@{creator?.username || ""}</a>
                 </Link>
               </h3>
-              <div className={classes.likes}>
+              {/* <div className={classes.likes}>
                 <FcLike /> {likes}
-              </div>
+              </div> */}
             </div>
           </Card>
         </a>

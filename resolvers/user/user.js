@@ -132,18 +132,21 @@ export const loginUser = async (_, { email, password }) => {
 
 export const getUserBlogs = async (
   _,
-  { username, AUTH_KEY, title, showPrivate }
+  { username, title, showPrivate },
+  { session }
 ) => {
   try {
-    let isCreator = false;
-    if (AUTH_KEY && AUTH_KEY === process.env.AUTH_KEY) {
-      isCreator = true;
-    }
     const userValidation = await User.findOne({
       username: { $regex: username, $options: "i" },
     });
     if (!userValidation) {
       throw new ErrorResponse("User not found", 404);
+    }
+    // console.log(session);
+
+    let isCreator = false;
+    if (session && session.user.id == String(userValidation._id)) {
+      isCreator = true;
     }
     let search = {
       creator: userValidation._id,

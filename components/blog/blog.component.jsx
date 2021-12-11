@@ -38,6 +38,7 @@ export const BlogCompo = ({ blog }) => {
       <h1 className={classes.BlogTitle}>{blog.title}</h1>
       <main>
         <ReactMarkdown
+          linkTarget="_blank"
           children={blog.content}
           remarkPlugins={[remarkGfm]}
           rehypePlugins={[rehypeRaw]}

@@ -5,5 +5,6 @@ module.exports = {
   env: {
     MONGODB_URI: process.env.MONGODB_URI,
     AUTH_KEY: process.env.AUTH_KEY,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
 };

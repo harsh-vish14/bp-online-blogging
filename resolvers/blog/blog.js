@@ -26,17 +26,19 @@ export const createBlog = async (
     const blogData = await Blog.create({
       creator,
       isPrivate,
-      title,
+      title: title.toLowerCase(),
       content,
-      coverPhoto,
+      coverPhoto:
+        coverPhoto ||
+        "https://images.unsplash.com/photo-1620503374956-c942862f0372?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=100",
     });
     await User.findOneAndUpdate(
       { _id: creator },
       { $push: { blogs: blogData._id } }
     );
-    const blogPopulateData = await Blog.findOne({ _id: blogData._id }).populate(
-      "creator"
-    );
+    const blogPopulateData = await Blog.find()
+      .sort({ updateAt: -1 })
+      .populate("creator");
     return {
       success: true,
       message: "Blog created successfully",
@@ -54,7 +56,10 @@ export const updateBlog = async (_, { id, title, content, coverPhoto }) => {
       throw new ErrorResponse("blog not found", 404);
     }
 
-    await Blog.findOneAndUpdate({ _id: id }, { title, content, coverPhoto });
+    await Blog.findOneAndUpdate(
+      { _id: id },
+      { title: title.toLowerCase(), content, coverPhoto }
+    );
 
     const blogPopulateData = await Blog.findOne({
       _id: blogValidation._id,
