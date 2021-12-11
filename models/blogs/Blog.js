@@ -28,22 +28,6 @@ const BlogSchema = new mongoose.Schema(
       type: String,
       require: [true, "Please provide a cover photo"],
     },
-    comments: [
-      new mongoose.Schema(
-        {
-          commentedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            require: [true, "Please provide a commenter id"],
-          },
-          message: {
-            type: String,
-            require: [true, "Please provide a message"],
-          },
-        },
-        { timestamps: true }
-      ),
-    ],
   },
   { timestamps: true }
 );

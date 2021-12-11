@@ -130,17 +130,35 @@ export const loginUser = async (_, { email, password }) => {
   };
 };
 
-export const getUserBlogs = async (_, { username }) => {
+export const getUserBlogs = async (
+  _,
+  { username, AUTH_KEY, title, showPrivate }
+) => {
   try {
+    let isCreator = false;
+    if (AUTH_KEY && AUTH_KEY === process.env.AUTH_KEY) {
+      isCreator = true;
+    }
     const userValidation = await User.findOne({
       username: { $regex: username, $options: "i" },
     });
     if (!userValidation) {
       throw new ErrorResponse("User not found", 404);
     }
-    const blogs = await Blog.find({ creator: userValidation._id }).populate(
-      "creator"
-    );
+    let search = {
+      creator: userValidation._id,
+    };
+    if (title) {
+      search.title = { $regex: title, $options: "i" };
+    }
+    if (showPrivate != null && isCreator) {
+      search.isPrivate = showPrivate;
+    } else {
+      search.$or = [{ isPrivate: isCreator }, { isPrivate: false }];
+    }
+    const blogs = await Blog.find(search)
+      .sort({ updatedAt: -1 })
+      .populate("creator");
     return {
       success: true,
       blogs,

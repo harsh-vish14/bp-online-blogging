@@ -1,4 +1,5 @@
 import { Blog } from "../../models/blogs/Blog";
+import { Comment } from "../../models/blogs/comments";
 import { User } from "../../models/user/User";
 import { ErrorResponse } from "../../utils/ErrorResponse";
 
@@ -116,10 +117,7 @@ export const allBlogs = async (_, { title }) => {
   if (title) {
     search.title = { $regex: title, $options: "i" };
   }
-  const blogs = await Blog.find(search)
-    .limit(limit)
-    .skip(startIndex)
-    .populate("creator");
+  const blogs = await Blog.find(search).sort({ likes: -1 }).populate("creator");
   return {
     success: true,
     blogs,
@@ -128,25 +126,21 @@ export const allBlogs = async (_, { title }) => {
 
 // exports = { createBlog, updateBlog, deleteBlog, getBlogByTitle, allBlogs };
 
-export const commentsByBlogId = async (_, { blogId, sliceStart, slice }) => {
-  const blog = await Blog.find(
-    { _id: blogId },
-    { comments: { $slice: [sliceStart, slice] } }
-  ).populate("comments.commentedBy");
-  console.log(sliceStart, slice);
+export const commentsByBlogId = async (_, { blogId }) => {
+  const blog = await Blog.find({ _id: blogId });
   if (!blog) {
     throw new ErrorResponse("Blog not found", 404);
   }
+  const comments = await Comment.find({ blog: blogId })
+    .sort({ updatedAt: -1 })
+    .populate("commentedBy");
   return {
     success: true,
-    comments: blog[0].comments,
+    comments,
   };
 };
 
-export const addCommentToBlog = async (
-  _,
-  { blogId, message, userId, slice }
-) => {
+export const addCommentToBlog = async (_, { blogId, message, userId }) => {
   if (!message) {
     throw new ErrorResponse("Message cannot be empty", 400);
   }
@@ -158,44 +152,28 @@ export const addCommentToBlog = async (
   if (!user) {
     throw new ErrorResponse("User not found", 404);
   }
-  await Blog.findOneAndUpdate(
-    { _id: blogId },
-    {
-      $push: {
-        comments: {
-          $each: [{ commentedBy: user._id, message }],
-          $sort: { updatedAt: -1 },
-        },
-      },
-    }
-  );
-
-  const blogComments = await Blog.findOne(
-    { _id: blogId },
-    { comments: { $slice: [0, slice] } }
-  );
+  await Comment.create({
+    commentedBy: user._id,
+    message,
+    blog: blog._id,
+  });
+  const comments = await Comment.find({ blog: blogId })
+    .sort({ updatedAt: -1 })
+    .populate("commentedBy");
 
   return {
     success: true,
     message: "Comment added successfully",
+    comments,
   };
 };
 
 export const deleteComment = async (_, { commentId }) => {
-  const commentData = await Blog.findOne({ "comments._id": commentId });
+  const commentData = await Comment.findOne({ _id: commentId });
   if (!commentData) {
     throw new ErrorResponse("Comment not found", 404);
   }
-  await Blog.updateOne(
-    { "comments._id": commentId },
-    {
-      $pull: {
-        comments: {
-          _id: commentId,
-        },
-      },
-    }
-  );
+  await Comment.findOneAndDelete({ _id: commentId });
   return {
     success: true,
     message: "Comment Deleted Successfully",

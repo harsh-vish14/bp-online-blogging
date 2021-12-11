@@ -5,6 +5,8 @@ import ErrorPage from "next/error";
 import { useSession } from "next-auth/client";
 import React from "react";
 import { BlogCompo } from "../../components/blog/blog.component";
+import LottieAnimation from "../../components/lottie/lottieAnimation";
+import blogLoader from "../../animation/blog_loader.json";
 
 export default ({ blogData }) => {
   const [session, loading] = useSession();
@@ -23,6 +25,10 @@ export default ({ blogData }) => {
       }
     }
   }, [loading]);
+
+  if (loading) {
+    return <LottieAnimation lottie={blogLoader} width={300} height={300} />;
+  }
 
   if (errorFound) {
     return <ErrorPage statusCode={404} />;

@@ -40,8 +40,7 @@ export const Mutations = gql`
       blogId: String!
       message: String!
       userId: String!
-      slice: Int!
-    ): MessageResponse
+    ): DetailsResponseComments
 
     deleteComment(commentId: String!): MessageResponse
 

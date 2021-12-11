@@ -3,14 +3,15 @@ import { gql } from "apollo-server-micro";
 export const Queries = gql`
   type Query {
     login(email: String!, password: String!): DetailsResponseUser
-    getUserBlogs(username: String!): UserBlogs
+    getUserBlogs(
+      username: String!
+      AUTH_KEY: String
+      title: String
+      showPrivate: Boolean
+    ): UserBlogs
     getBlogByTitle(title: String!): BlogMainTitleSearchResponse
     allBlogs(title: String): BlogSearchFilterResponse
-    commentsByBlogId(
-      blogId: String!
-      sliceStart: Int!
-      slice: Int!
-    ): DetailsResponseComments
+    commentsByBlogId(blogId: String!): DetailsResponseComments
   }
 
   type BlogMainTitleSearchResponse {
