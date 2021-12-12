@@ -57,7 +57,7 @@ export const getStaticProps = async (context) => {
       title: normalTitle,
     },
     { comments: 0, createdAt: 0 }
-  ).populate("creator", "name username profileImage");
+  ).populate("creator", "_id name username profileImage");
   console.log(blogData?._id, userData?._id);
   if (!blogData || !userData) {
     return {

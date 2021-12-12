@@ -7,13 +7,11 @@ export const CardContainer = ({ blogs }) => {
     <div className={classes.container}>
       {blogs &&
         blogs.map(
-          (
-            { coverPhoto, title, likes, creator, updatedAt, isPrivate },
-            index
-          ) => {
+          ({ coverPhoto, title, likes, creator, updatedAt, isPrivate, id }) => {
             return (
               <CardComponent
-                key={index}
+                key={id}
+                id={id}
                 coverPhoto={coverPhoto}
                 title={title}
                 likes={likes}

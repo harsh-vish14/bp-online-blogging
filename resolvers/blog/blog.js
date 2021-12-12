@@ -14,7 +14,7 @@ export const createBlog = async (
     }
 
     const titleValidation = await Blog.findOne({
-      title: { $regex: title, $options: "i" },
+      title: title.toLowerCase(),
     });
     if (titleValidation) {
       throw new ErrorResponse(
@@ -49,16 +49,29 @@ export const createBlog = async (
   }
 };
 
-export const updateBlog = async (_, { id, title, content, coverPhoto }) => {
+export const updateBlog = async (
+  _,
+  { id, title, content, coverPhoto, isPrivate },
+  { session }
+) => {
   try {
     const blogValidation = await Blog.findOne({ _id: id });
     if (!blogValidation) {
       throw new ErrorResponse("blog not found", 404);
     }
 
+    if (!session && String(blogValidation.creator) !== session.user.id) {
+      throw new ErrorResponse("Invalid Authorization", 401);
+    }
+
     await Blog.findOneAndUpdate(
       { _id: id },
-      { title: title.toLowerCase(), content, coverPhoto }
+      {
+        title: title.toLowerCase(),
+        content,
+        isPrivate,
+        coverPhoto: coverPhoto || blogValidation.coverPhoto,
+      }
     );
 
     const blogPopulateData = await Blog.findOne({
@@ -122,7 +135,9 @@ export const allBlogs = async (_, { title }) => {
   if (title) {
     search.title = { $regex: title, $options: "i" };
   }
-  const blogs = await Blog.find(search).sort({ likes: -1 }).populate("creator");
+  const blogs = await Blog.find(search)
+    .sort({ updateAt: -1 })
+    .populate("creator");
   return {
     success: true,
     blogs,

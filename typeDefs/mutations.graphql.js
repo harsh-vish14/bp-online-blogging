@@ -30,7 +30,7 @@ export const Mutations = gql`
 
     updateBlog(
       id: ID!
-      coverPhoto: String!
+      coverPhoto: String
       isPrivate: Boolean
       title: String!
       content: String!

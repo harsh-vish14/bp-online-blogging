@@ -1,10 +1,11 @@
 import { getSession } from "next-auth/client";
 import React from "react";
-import { Creat_Update_Blog } from "../../components/blog_create_update/blog_create_update";
+import { Creat_Update_Blog } from "../../components/blog_create_update/create_update_blog";
 import { Blog } from "../../models/blogs/Blog";
 
 export default ({ blog }) => {
   return <Creat_Update_Blog blog={blog} />;
+  // return <div>hello</div>;
 };
 
 export const getServerSideProps = async (context) => {

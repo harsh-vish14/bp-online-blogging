@@ -8,13 +8,15 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { useMutation } from "react-apollo";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Spinner } from "../loaders/spinner";
-import { gql } from "apollo-boost";
+import blogLoader from "../../animation/blog_loader.json";
 import { useSession } from "next-auth/client";
 import { createNotification } from "../../utils/createNotification";
 import { uploadImages } from "../../utils/uploadImages";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { ADD_BLOG, UPDATE_BLOG } from "../querys/query.js";
+import { useRouter } from "next/router";
 import classes from "./blog_create_update.module.scss";
+import { cacheClear } from "../../pages/_app";
+import LottieAnimation from "../lottie/lottieAnimation";
 
 const STARTER_CODE = `# Getting Started
 
@@ -30,48 +32,17 @@ HTML
 const DEFAULT_COVER_PHOTO =
   "https://images.unsplash.com/photo-1620503374956-c942862f0372?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=100";
 
-const ADD_BLOG = gql`
-  mutation addBlog(
-    $creator: ID!
-    $coverPhoto: String
-    $title: String!
-    $content: String!
-    $isPrivate: Boolean
-  ) {
-    addBlog(
-      creator: $creator
-      coverPhoto: $coverPhoto
-      title: $title
-      content: $content
-      isPrivate: $isPrivate
-    ) {
-      success
-      message
-      blog {
-        creator {
-          id
-          username
-        }
-        isPrivate
-        title
-        likes
-        coverPhoto
-        updatedAt
-        id
-      }
-    }
-  }
-`;
-
 export const Creat_Update_Blog = ({ blog }) => {
+  const router = useRouter();
+  const [pageLoading, setPageLoading] = React.useState(false);
   const [session, loadingSession] = useSession();
   const [addBlog, { data, loading, error }] = useMutation(ADD_BLOG);
+  const [updateBlog, response] = useMutation(UPDATE_BLOG);
   const [imageFile, setImageFile] = React.useState(null);
-  const [imageFileImage, setImageFileImage] =
-    React.useState(DEFAULT_COVER_PHOTO);
-  const [imageUrl, setImageUrl] = React.useState(
+  const [imageFileImage, setImageFileImage] = React.useState(
     blog?.coverPhoto || DEFAULT_COVER_PHOTO
   );
+  const [imageUrl, setImageUrl] = React.useState("");
   const [title, setTitle] = React.useState(blog?.title || "");
   const [content, setContent] = React.useState(blog?.content || STARTER_CODE);
   const [isPrivate, setIsPrivate] = React.useState(blog?.isPrivate || false);
@@ -84,8 +55,9 @@ export const Creat_Update_Blog = ({ blog }) => {
   };
 
   const createBlog = async () => {
+    setPageLoading(true);
     if (imageFile) {
-      await uploadImages(imageFile, "coverImage/", submitWithImage);
+      await uploadImages(imageFile, "coverImage/", submitWithImage, imageUrl);
     } else {
       await addBlog({
         variables: {
@@ -97,12 +69,45 @@ export const Creat_Update_Blog = ({ blog }) => {
         },
       });
     }
-    // if (!imageFile) {
-    // } else {
-    // }
   };
+  const EditBlog = async () => {
+    setPageLoading(true);
+    if (imageFile) {
+      await uploadImages(
+        imageFile,
+        "coverImage/",
+        submitWithImageEdit,
+        imageUrl
+      );
+    } else {
+      await updateBlog({
+        variables: {
+          updateBlogId: blog._id,
+          coverPhoto: null,
+          title: title,
+          content: content,
+          isPrivate: isPrivate,
+        },
+      });
+    }
+  };
+  const submitWithImageEdit = async (image) => {
+    console.log(image);
+    setImageUrl(image);
+    await updateBlog({
+      variables: {
+        updateBlogId: blog._id,
+        coverPhoto: image,
+        title: title,
+        content: content,
+        isPrivate: isPrivate,
+      },
+    });
+  };
+
   const submitWithImage = async (image) => {
     console.log(image);
+    setImageUrl(image);
     await addBlog({
       variables: {
         creator: session.user.id,
@@ -111,18 +116,27 @@ export const Creat_Update_Blog = ({ blog }) => {
         content: content,
         isPrivate: isPrivate,
       },
-      //   update: (cache) => {
-      //     cache.writeData({ data: {} });
-      //   },
     });
   };
   React.useEffect(() => {
     (async () => {
-      const cache = new InMemoryCache();
+      // const cache = new InMemoryCache();
 
       if (data) {
         console.log(data);
-        createNotification("Blog Created", data.addBlog.message, "success");
+        createNotification(
+          "Blog Created",
+          "Blog Has Created successfully",
+          "success"
+        );
+        cacheClear();
+        router.push(
+          `/creator/@${session.user.username}/${title
+            .split(" ")
+            .join("-")
+            .toLowerCase()}`
+        );
+        setPageLoading(false);
       }
       if (error) {
         //   console.log(JSON.stringify(error));
@@ -131,33 +145,87 @@ export const Creat_Update_Blog = ({ blog }) => {
           error.graphQLErrors[0].message,
           "error"
         );
+        setPageLoading(false);
       }
     })();
   }, [data, error]);
-  if (loading) {
-    <div>
-      <Spinner />
-    </div>;
+
+  React.useEffect(() => {
+    if (response.data) {
+      console.log(response.data);
+      createNotification(
+        "Blog Update",
+        response.data.updateBlog.message,
+        "success"
+      );
+      cacheClear();
+      router.push(
+        `/creator/@${session.user.username}/${title
+          .split(" ")
+          .join("-")
+          .toLowerCase()}`
+      );
+      setPageLoading(false);
+    }
+    if (response.error) {
+      console.log(JSON.stringify(response.error));
+      console.log(blog._id);
+      createNotification(
+        "Error Occurred",
+        response.error.graphQLErrors,
+        "error"
+      );
+      setPageLoading(false);
+    }
+  }, [response.data, response.error]);
+
+  if (loading || response.loading || pageLoading) {
+    return <LottieAnimation lottie={blogLoader} width={300} height={300} />;
   }
+
   return (
     <>
       <div className={classes.btns}>
-        <Button
-          type="primary"
-          disabled={content.length === 0 || title.length === 0}
-          onClick={createBlog}
-        >
-          Create Blog
-        </Button>
+        {!blog ? (
+          <Button
+            type="primary"
+            disabled={content.length === 0 || title.length === 0}
+            onClick={createBlog}
+          >
+            Create Blog
+          </Button>
+        ) : (
+          <Button
+            type="primary"
+            disabled={content.length === 0 || title.length === 0}
+            onClick={EditBlog}
+          >
+            Edit Blog
+          </Button>
+        )}
         {isPrivate ? (
           <Button
-            style={{ display: "flex", alignItems: "center", fontSize: "16px" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "16px",
+            }}
+            onClick={() => {
+              setIsPrivate(false);
+            }}
           >
             <AiOutlineEyeInvisible /> Private
           </Button>
         ) : (
           <Button
-            style={{ display: "flex", alignItems: "center", fontSize: "16px" }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              fontSize: "16px",
+            }}
+            onClick={() => {
+              setIsPrivate(true);
+            }}
           >
             <AiOutlineEye /> Public
           </Button>

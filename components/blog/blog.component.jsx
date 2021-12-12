@@ -1,18 +1,59 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-// import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
-import classes from "./blog.module.scss";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { CommentComponent } from "../comment/comment.component";
+import classes from "./blog.module.scss";
+import { useSession } from "next-auth/client";
 
 export const BlogCompo = ({ blog }) => {
+  const [session, loading] = useSession();
   return (
     <section className={classes.blogMain}>
+      {!loading && session && session.user.id === blog.creator._id && (
+        <div className={classes.blogBtn}>
+          {console.log(session.user.id, blog.creator._id)}
+          <Link href={`/blog/${blog.title.split(" ").join("-")}`}>
+            <a>
+              <Button type="primary">Edit Blog</Button>
+            </a>
+          </Link>
+          {blog.isPrivate ? (
+            <Button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "16px",
+              }}
+              disabled={true}
+              // onClick={() => {
+              //   setIsPrivate(false);
+              // }}
+            >
+              <AiOutlineEyeInvisible /> Private
+            </Button>
+          ) : (
+            <Button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "16px",
+              }}
+              disabled={true}
+              // onClick={() => {
+              //   setIsPrivate(true);
+              // }}
+            >
+              <AiOutlineEye /> Public
+            </Button>
+          )}
+        </div>
+      )}
       <div className={classes.titleImage}>
         <Image
           src={blog.coverPhoto}

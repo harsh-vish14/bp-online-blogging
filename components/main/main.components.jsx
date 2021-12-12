@@ -3,28 +3,8 @@ import { Input } from "antd";
 import { CardContainer } from "../cardsContainer/cardsContainer.module";
 import classes from "./main.module.scss";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
 import { Spinner } from "../loaders/spinner";
-
-const GET_BLOGS_BY_TITLE = gql`
-  query allBlogs($title: String) {
-    allBlogs(title: $title) {
-      success
-      blogs {
-        id
-        isPrivate
-        title
-        coverPhoto
-        updatedAt
-        likes
-        creator {
-          username
-          id
-        }
-      }
-    }
-  }
-`;
+import { GET_BLOGS_BY_TITLE } from "../querys/query";
 
 export const Main = () => {
   const [search, setSearch] = React.useState("");

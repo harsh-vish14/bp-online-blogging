@@ -8,33 +8,7 @@ import { gql } from "apollo-boost";
 import { Spinner } from "../loaders/spinner";
 import { CardContainer } from "../cardsContainer/cardsContainer.module";
 import Link from "next/link";
-
-const CREATOR_BLOGS = gql`
-  query GetUserBlogs(
-    $username: String!
-    $title: String
-    $showPrivate: Boolean
-  ) {
-    getUserBlogs(
-      username: $username
-      title: $title
-      showPrivate: $showPrivate
-    ) {
-      blogs {
-        creator {
-          username
-          id
-        }
-        isPrivate
-        title
-        likes
-        coverPhoto
-        updatedAt
-        id
-      }
-    }
-  }
-`;
+import { CREATOR_BLOGS } from "../querys/query";
 
 const { Option } = Select;
 export const Creator = ({ userData, myProfile }) => {
