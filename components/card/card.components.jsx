@@ -91,6 +91,7 @@ export const CardComponent = ({
           />
         }
         actions={[
+          // TODO: Please add validation here
           <Tooltip placement="top" title="Edit Blog" key="edit">
             <div>
               <Link href={`/blog/${title.split(" ").join("-").toLowerCase()}`}>
