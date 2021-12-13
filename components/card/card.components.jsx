@@ -8,15 +8,12 @@ import {
 } from "react-icons/ai";
 import { dateFormate } from "../../utils/dateFormate";
 import Image from "next/image";
-import classes from "./card.module.scss";
 import { useMutation } from "react-apollo";
-import {
-  DELETE_BLOG_BY_ID,
-  GET_BLOGS_BY_TITLE,
-  CREATOR_BLOGS,
-} from "../querys/query";
+import { DELETE_BLOG_BY_ID } from "../querys/query";
 import { cacheClear } from "../../pages/_app";
 import { createNotification } from "../../utils/createNotification";
+import { useSession } from "next-auth/client";
+import classes from "./card.module.scss";
 
 const { confirm } = Modal;
 
@@ -29,6 +26,7 @@ export const CardComponent = ({
   isPrivate = true,
   id,
 }) => {
+  const [session, loadingSession] = useSession();
   const [deleteBlog, { data, loading, error }] = useMutation(DELETE_BLOG_BY_ID);
   function showConfirm() {
     confirm({
@@ -90,23 +88,29 @@ export const CardComponent = ({
             objectPosition="center"
           />
         }
-        actions={[
-          // TODO: Please add validation here
-          <Tooltip placement="top" title="Edit Blog" key="edit">
-            <div>
-              <Link href={`/blog/${title.split(" ").join("-").toLowerCase()}`}>
-                <a style={{ color: "#0000007a" }}>
-                  <AiFillEdit />
-                </a>
-              </Link>
-            </div>
-          </Tooltip>,
-          <Tooltip placement="top" title="Delete Blog" key="delete">
-            <div style={{ color: "#0000007a" }} onClick={showConfirm}>
-              <AiFillDelete />
-            </div>
-          </Tooltip>,
-        ]}
+        actions={
+          (!loadingSession &&
+            session &&
+            session.user.id === creator.id && [
+              <Tooltip placement="top" title="Edit Blog" key="edit">
+                <div>
+                  <Link
+                    href={`/blog/${title.split(" ").join("-").toLowerCase()}`}
+                  >
+                    <a style={{ color: "#0000007a" }}>
+                      <AiFillEdit />
+                    </a>
+                  </Link>
+                </div>
+              </Tooltip>,
+              <Tooltip placement="top" title="Delete Blog" key="delete">
+                <div style={{ color: "#0000007a" }} onClick={showConfirm}>
+                  <AiFillDelete />
+                </div>
+              </Tooltip>,
+            ]) ||
+          []
+        }
       >
         <Link
           href={`/creator/@${creator?.username}/${title

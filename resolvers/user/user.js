@@ -2,6 +2,9 @@ import { Blog } from "../../models/blogs/Blog";
 import { User } from "../../models/user/User";
 import { hashing, comparePassword } from "../../utils/cryption";
 import { ErrorResponse } from "../../utils/ErrorResponse";
+import { sendEmail } from "../../utils/sendEmail";
+import { RESET_PASSWORD_TEMPLATE } from "../utils/templetes";
+import crypto from "crypto";
 
 export const createUser = async (
   _,
@@ -61,45 +64,23 @@ export const createUser = async (
 
 export const updateUser = async (
   _,
-  { id, name, email, password, bio, profileImage }
+  { id, name, email, bio, profileImage },
+  { session }
 ) => {
   try {
     const userValidation = await User.findOne({ _id: id });
     if (!userValidation) {
       throw new ErrorResponse("User not found", 404);
     }
-    let updatedPassword = null;
-    if (password) {
-      const specialCharacterFormat = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-      if (password.search(/[0-9]/) == -1) {
-        throw new ErrorResponse(
-          "Password must contain atleast 6 characters",
-          400
-        );
-      } else if (password.search(/[a-z]/) == -1) {
-        throw new ErrorResponse(
-          "Password must contain one lower case character",
-          400
-        );
-      } else if (password.search(/[A-Z]/) == -1) {
-        throw new ErrorResponse(
-          "Password must contain one upper case character",
-          400
-        );
-      } else if (!specialCharacterFormat.test(password)) {
-        throw new ErrorResponse("Password must contain special character", 400);
-      }
-      const hashedPassword = hashing(password);
-      updatedPassword = hashedPassword;
+    if (!session || session.user.id !== id) {
+      throw new ErrorResponse("Invalid authorization", 401);
     }
-
     await User.findOneAndUpdate(
       { _id: id },
       {
         name,
         email,
-        password,
         bio,
         profileImage,
       }
@@ -170,3 +151,34 @@ export const getUserBlogs = async (
     throw new ErrorResponse(err);
   }
 };
+
+export const resetPassword = async (_, {}, { session }) => {
+  if (!session) {
+    throw new ErrorResponse("You need to login to website first", 401);
+  }
+  const userDetails = await User.findOne({ _id: session.user.id });
+  if (!userDetails) {
+    throw new ErrorResponse("Login user not found", 404);
+  }
+  try {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    crypto.randomBytes(32, async (err, buffer) => {
+      const token = buffer.toString("hex");
+      const subject = "Reset Password";
+      const body = RESET_PASSWORD_TEMPLATE(token);
+      const to = [userDetails.email];
+      await sendEmail(subject, body, to);
+      await User.findOneAndUpdate(
+        { _id: session.user.id },
+        { resetToken: { token, expire: date.toISOString() } }
+      );
+    });
+  } catch (err) {
+    throw new ErrorResponse("Error Happened,Please try again later", 500);
+  }
+};
+
+// export const resetPasswordWithToken = async (_, { token }, { }) => {
+//   // const user = await
+// }

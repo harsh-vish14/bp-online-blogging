@@ -9,7 +9,7 @@ import { storage } from "../config/firebase";
 import { v4 as uuidv4 } from "uuid";
 
 export const uploadImages = async (image, url, setImageUrl, oldImage) => {
-  if (oldImage) {
+  if (oldImage && oldImage.includes("firebasestorage.googleapis.com")) {
     const storage = getStorage();
 
     // Create a reference to the file to delete

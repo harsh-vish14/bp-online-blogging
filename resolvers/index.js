@@ -8,7 +8,13 @@ import {
   addCommentToBlog,
   deleteComment,
 } from "./blog/blog";
-import { createUser, updateUser, loginUser, getUserBlogs } from "./user/user";
+import {
+  createUser,
+  updateUser,
+  loginUser,
+  getUserBlogs,
+  resetPassword,
+} from "./user/user";
 
 export const resolvers = {
   Query: {
@@ -27,5 +33,6 @@ export const resolvers = {
     deleteBlog,
     addCommentToBlog,
     deleteComment,
+    resetPassword,
   },
 };

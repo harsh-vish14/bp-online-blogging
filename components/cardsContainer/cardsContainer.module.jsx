@@ -1,5 +1,6 @@
 import React from "react";
 import { CardComponent } from "../card/card.components";
+import { NoBlogs } from "../noBlogs/noBlogs.jsx";
 import classes from "./cardsContainer.module.scss";
 
 export const CardContainer = ({ blogs }) => {
@@ -22,6 +23,7 @@ export const CardContainer = ({ blogs }) => {
             );
           }
         )}
+      {blogs && blogs.length === 0 && <NoBlogs description="No Blogs" />}
     </div>
   );
 };

@@ -17,7 +17,6 @@ export const Mutations = gql`
       bio: String!
       profileImage: String
       email: String!
-      password: String
     ): DetailsResponseUser
 
     addBlog(
@@ -41,6 +40,8 @@ export const Mutations = gql`
       message: String!
       userId: String!
     ): DetailsResponseComments
+
+    resetPassword(id: ID): MessageResponse
 
     deleteComment(commentId: String!): MessageResponse
 

@@ -87,12 +87,16 @@ export const updateBlog = async (
   }
 };
 
-export const deleteBlog = async (_, { id }) => {
+export const deleteBlog = async (_, { id }, { session }) => {
   try {
     const blogValidation = await Blog.findOne({ _id: id });
     if (!blogValidation) {
       throw new ErrorResponse("Blog not found", 404);
     }
+    if (!session && String(blogValidation.creator) !== session.user.id) {
+      throw new ErrorResponse("Invalid Authorization", 401);
+    }
+
     await Blog.deleteOne({ _id: id });
     await User.findOneAndUpdate(
       { _id: blogValidation.creator },

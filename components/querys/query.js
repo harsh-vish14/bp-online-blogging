@@ -108,3 +108,33 @@ export const DELETE_BLOG_BY_ID = gql`
     }
   }
 `;
+
+export const UPDATE_USER = gql`
+  mutation UpdateUser(
+    $updateUserId: ID!
+    $name: String!
+    $bio: String!
+    $email: String!
+    $profileImage: String
+  ) {
+    updateUser(
+      id: $updateUserId
+      name: $name
+      bio: $bio
+      email: $email
+      profileImage: $profileImage
+    ) {
+      success
+      message
+    }
+  }
+`;
+
+export const RESET_PASSWORD = gql`
+  mutation ResetPassword {
+    resetPassword {
+      success
+      message
+    }
+  }
+`;

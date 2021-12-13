@@ -4,11 +4,12 @@ import React from "react";
 import classes from "./creator.module.scss";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Query } from "react-apollo";
-import { gql } from "apollo-boost";
 import { Spinner } from "../loaders/spinner";
 import { CardContainer } from "../cardsContainer/cardsContainer.module";
 import Link from "next/link";
 import { CREATOR_BLOGS } from "../querys/query";
+import { EditProfile } from "../editCreator/editCreator";
+import { ResetButton } from "../reset/resetBtn";
 
 const { Option } = Select;
 export const Creator = ({ userData, myProfile }) => {
@@ -38,18 +39,23 @@ export const Creator = ({ userData, myProfile }) => {
               marginTop: "10px",
             }}
           >
-            <Link href="/blog/create">
-              <a>
-                <Button
-                  type="primary"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <AiOutlinePlus />
-                  Blog
-                </Button>
-              </a>
-            </Link>
-            <Button type="primary">Edit Profile</Button>
+            {myProfile && (
+              <>
+                <Link href="/blog/create">
+                  <a>
+                    <Button
+                      type="primary"
+                      style={{ display: "flex", alignItems: "center" }}
+                    >
+                      <AiOutlinePlus />
+                      Blog
+                    </Button>
+                  </a>
+                </Link>
+                <EditProfile userData={userData} />
+                <ResetButton />
+              </>
+            )}
           </div>
         </div>
       </div>
