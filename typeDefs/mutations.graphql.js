@@ -43,6 +43,20 @@ export const Mutations = gql`
 
     resetPassword(id: ID): MessageResponse
 
+    forgetPassword(email: String!): MessageResponse
+
+    forgetPasswordWithToken(
+      token: String!
+      newPassword: String!
+      confirmPassword: String!
+    ): MessageResponse
+
+    resetPasswordWithToken(
+      token: String!
+      oldPassword: String!
+      newPassword: String!
+    ): MessageResponse
+
     deleteComment(commentId: String!): MessageResponse
 
     deleteBlog(id: ID!): MessageResponse

@@ -9,7 +9,7 @@ import { uploadImages } from "../../utils/uploadImages";
 import { useRouter } from "next/router";
 
 const { TextArea } = Input;
-
+// TODO: add register user
 export const Registration = () => {
   const router = useRouter();
   const [form] = Form.useForm();
@@ -195,7 +195,9 @@ export const Registration = () => {
         </Form>
 
         <div className={classes.otherBtn}>
-          <div>Forget Password ?</div>
+          <div>
+            <Link href="/forget">Forget Password ?</Link>
+          </div>
           <div>
             <Link href="/account/login">Having Account ? Login</Link>
           </div>

@@ -3,7 +3,10 @@ import { User } from "../../models/user/User";
 import { hashing, comparePassword } from "../../utils/cryption";
 import { ErrorResponse } from "../../utils/ErrorResponse";
 import { sendEmail } from "../../utils/sendEmail";
-import { RESET_PASSWORD_TEMPLATE } from "../utils/templetes";
+import {
+  RESET_PASSWORD_TEMPLATE,
+  FORGET_PASSWORD_TEMPLATE,
+} from "../utils/templetes";
 import crypto from "crypto";
 
 export const createUser = async (
@@ -179,6 +182,127 @@ export const resetPassword = async (_, {}, { session }) => {
   }
 };
 
-// export const resetPasswordWithToken = async (_, { token }, { }) => {
-//   // const user = await
-// }
+export const resetPasswordWithToken = async (
+  _,
+  { token, oldPassword, newPassword }
+) => {
+  const userDetails = await User.findOne({ "resetToken.token": token });
+  if (!userDetails) {
+    throw new ErrorResponse("Token not found", 404);
+  }
+  if (!(await comparePassword(oldPassword, userDetails.password))) {
+    throw new ErrorResponse("Password did not match", 400);
+  }
+
+  const specialCharacterFormat = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+  if (newPassword.search(/[0-9]/) == -1) {
+    throw new ErrorResponse("Password must contain atleast 6 characters", 400);
+  } else if (newPassword.search(/[a-z]/) == -1) {
+    throw new ErrorResponse(
+      "Password must contain one lower case character",
+      400
+    );
+  } else if (newPassword.search(/[A-Z]/) == -1) {
+    throw new ErrorResponse(
+      "Password must contain one upper case character",
+      400
+    );
+  } else if (!specialCharacterFormat.test(newPassword)) {
+    throw new ErrorResponse("Password must contain special character", 400);
+  }
+  const currentDate = new Date();
+  const expiryDate = new Date(userDetails.resetToken.expiry);
+  if (currentDate > expiryDate) {
+    await User.findOneAndUpdate(
+      { "resetToken.token": token },
+      { resetToken: { token: null, expire: null } }
+    );
+    throw new ErrorResponse("Token is Expired", 400);
+  }
+
+  const hashingPassword = await hashing(newPassword);
+  await await User.findOneAndUpdate(
+    { "resetToken.token": token },
+    { resetToken: { token: null, expire: null }, password: hashingPassword }
+  );
+  return {
+    success: true,
+    message: "Password updated successfully",
+  };
+};
+
+export const forgetPassword = async (_, { email }) => {
+  const userDetails = await User.findOne({ email: email });
+  if (!userDetails) {
+    throw new ErrorResponse("Email not found", 404);
+  }
+
+  try {
+    const date = new Date();
+    date.setDate(date.getDate() + 1);
+    crypto.randomBytes(32, async (err, buffer) => {
+      const token = buffer.toString("hex");
+      const subject = "Forget Password";
+      const body = FORGET_PASSWORD_TEMPLATE(token);
+      const to = [userDetails.email];
+      await sendEmail(subject, body, to);
+      await User.findOneAndUpdate(
+        { _id: userDetails._id },
+        { resetToken: { token, expire: date.toISOString() } }
+      );
+    });
+  } catch (err) {
+    throw new ErrorResponse("Error Happened,Please try again later", 500);
+  }
+};
+
+export const forgetPasswordWithToken = async (
+  _,
+  { token, newPassword, confirmPassword }
+) => {
+  if (newPassword !== confirmPassword) {
+    throw new ErrorResponse("Password did not match", 400);
+  }
+  const userDetails = await User.findOne({ "resetToken.token": token });
+  if (!userDetails) {
+    throw new ErrorResponse("Token not found", 404);
+  }
+
+  const specialCharacterFormat = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+  if (newPassword.search(/[0-9]/) == -1) {
+    throw new ErrorResponse("Password must contain atleast 6 characters", 400);
+  } else if (newPassword.search(/[a-z]/) == -1) {
+    throw new ErrorResponse(
+      "Password must contain one lower case character",
+      400
+    );
+  } else if (newPassword.search(/[A-Z]/) == -1) {
+    throw new ErrorResponse(
+      "Password must contain one upper case character",
+      400
+    );
+  } else if (!specialCharacterFormat.test(newPassword)) {
+    throw new ErrorResponse("Password must contain special character", 400);
+  }
+  const currentDate = new Date();
+  const expiryDate = new Date(userDetails.resetToken.expiry);
+  if (currentDate > expiryDate) {
+    await User.findOneAndUpdate(
+      { "resetToken.token": token },
+      { resetToken: { token: null, expire: null } }
+    );
+    throw new ErrorResponse("Token is Expired", 400);
+  }
+
+  const hashingPassword = await hashing(newPassword);
+  await await User.findOneAndUpdate(
+    { "resetToken.token": token },
+    { resetToken: { token: null, expire: null }, password: hashingPassword }
+  );
+  return {
+    success: true,
+    message: "Password updated successfully",
+  };
+};

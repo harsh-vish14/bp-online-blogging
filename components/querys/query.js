@@ -138,3 +138,46 @@ export const RESET_PASSWORD = gql`
     }
   }
 `;
+
+export const RESET_PASSWORD_WITH_TOKEN = gql`
+  mutation ResetPasswordWithToken(
+    $token: String!
+    $oldPassword: String!
+    $newPassword: String!
+  ) {
+    resetPasswordWithToken(
+      token: $token
+      oldPassword: $oldPassword
+      newPassword: $newPassword
+    ) {
+      success
+      message
+    }
+  }
+`;
+
+export const FORGET_PASSWORD = gql`
+  mutation forgetPassword($email: String!) {
+    forgetPassword(email: $email) {
+      success
+      message
+    }
+  }
+`;
+
+export const FORGET_PASSWORD_WITH_TOKEN = gql`
+  mutation forgetPasswordWithToken(
+    $token: String!
+    $newPassword: String!
+    $confirmPassword: String!
+  ) {
+    forgetPasswordWithToken(
+      token: $token
+      newPassword: $newPassword
+      confirmPassword: $confirmPassword
+    ) {
+      success
+      message
+    }
+  }
+`;

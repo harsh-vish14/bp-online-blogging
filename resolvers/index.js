@@ -14,6 +14,9 @@ import {
   loginUser,
   getUserBlogs,
   resetPassword,
+  resetPasswordWithToken,
+  forgetPassword,
+  forgetPasswordWithToken,
 } from "./user/user";
 
 export const resolvers = {
@@ -34,5 +37,8 @@ export const resolvers = {
     addCommentToBlog,
     deleteComment,
     resetPassword,
+    resetPasswordWithToken,
+    forgetPassword,
+    forgetPasswordWithToken,
   },
 };

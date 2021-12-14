@@ -55,7 +55,9 @@ export const Login = () => {
           Login
         </Button>
         <div className={classes.otherBtn}>
-          <div>Forget Password ?</div>
+          <div>
+            <Link href="/forget">Forget Password ?</Link>
+          </div>
           <div>
             <Link href="/account/register">New Here ? Registration</Link>
           </div>

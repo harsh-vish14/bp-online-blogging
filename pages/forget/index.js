@@ -1,5 +1,6 @@
 import React from "react";
+import { Forget } from "../../components/forget/forget.components";
 
 export default () => {
-  return <div></div>;
+  return <Forget />;
 };

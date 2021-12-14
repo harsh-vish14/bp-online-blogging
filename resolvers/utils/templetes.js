@@ -197,7 +197,7 @@ a[x-apple-data-detectors='true'] {
   <tr>
     <td style="padding-right: 0px;padding-left: 0px;" align="center">
       
-      <img align="center" border="0" src="images/image-1.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 10%;max-width: 58px;" width="58"/>
+      <img align="center" border="0" src="https://firebasestorage.googleapis.com/v0/b/images-to-link-converter.appspot.com/o/images%2FtieFK79tCHimage-1.png?alt=media&token=d4f6cd9f-4055-43e3-8b0c-b7ce32c1b5bf" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 10%;max-width: 58px;" width="58"/>
       
     </td>
   </tr>
@@ -663,7 +663,7 @@ export const FORGET_PASSWORD_TEMPLATE = (token) => {
                                 <tr>
                                   <td style="padding-right: 0px;padding-left: 0px;" align="center">
 
-                                    <img align="center" border="0" src="images/image-1.png" alt="Image" title="Image"
+                                    <img align="center" border="0" src="https://firebasestorage.googleapis.com/v0/b/images-to-link-converter.appspot.com/o/images%2FtieFK79tCHimage-1.png?alt=media&token=d4f6cd9f-4055-43e3-8b0c-b7ce32c1b5bf" alt="Image" title="Image"
                                       style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 10%;max-width: 58px;"
                                       width="58" />
 
@@ -760,7 +760,7 @@ export const FORGET_PASSWORD_TEMPLATE = (token) => {
 
                               <div align="left">
                                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Lato',sans-serif;"><tr><td style="font-family:'Lato',sans-serif;" align="left"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:52px; v-text-anchor:middle; width:213px;" arcsize="2%" stroke="f" fillcolor="#18163a"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Lato',sans-serif;"><![endif]-->
-                                <a href="http://localhost:3000/reset/${token}" target="_blank"
+                                <a href="http://localhost:3000/forget/${token}" target="_blank"
                                   style="box-sizing: border-box;display: inline-block;font-family:'Lato',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #18163a; border-radius: 1px;-webkit-border-radius: 1px; -moz-border-radius: 1px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                   <span style="display:block;padding:15px 40px;line-height:120%;"><span
                                       style="font-size: 18px; line-height: 21.6px;">Forget Password</span></span>

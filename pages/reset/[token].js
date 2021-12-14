@@ -1,8 +1,5 @@
-import { useRouter } from "next/router";
+import { Reset } from "../../components/reset/reset.components";
 
 export default () => {
-  const router = useRouter();
-  const { token } = router.query;
-
-  return <div>Reset Password: {token}</div>;
+  return <Reset />;
 };
