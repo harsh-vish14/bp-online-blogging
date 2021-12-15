@@ -31,6 +31,9 @@ export const Blog = gql`
   }
 
   type Comment {
+    "comment unique identifier"
+    id: ID!
+
     "commented user id"
     commentedBy: User!
 

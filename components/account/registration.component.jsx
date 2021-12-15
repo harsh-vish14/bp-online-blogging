@@ -1,12 +1,14 @@
 import React from "react";
 import { Input, Button, Form, Upload } from "antd";
 import { AiOutlineEyeInvisible, AiOutlineEye } from "react-icons/ai";
-import classes from "./account.module.scss";
 import Link from "next/link";
 import { createNotification } from "../../utils/createNotification";
 import ImgCrop from "antd-img-crop";
 import { uploadImages } from "../../utils/uploadImages";
 import { useRouter } from "next/router";
+import { useMutation } from "react-apollo";
+import classes from "./account.module.scss";
+import { ADD_USER } from "../querys/query";
 
 const { TextArea } = Input;
 // TODO: add register user
@@ -16,19 +18,8 @@ export const Registration = () => {
   const [image, setImage] = React.useState(null);
   const [fileList, setFileList] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
-  const [imageUrl, setImageUrl] = React.useState();
-
-  React.useEffect(() => {
-    // if (imageUrl) {
-    //   createNotification(
-    //     "Account Created",
-    //     "Account created successfully, now user can login",
-    //     "success"
-    //   );
-    // }
-    console.log("imageUrl: ", imageUrl);
-  }, [imageUrl]);
-
+  const [imageUrl, setImageUrl] = React.useState(null);
+  const [addUser, { data, error }] = useMutation(ADD_USER);
   const layout = {
     labelCol: {
       span: 10,
@@ -37,6 +28,25 @@ export const Registration = () => {
       span: 20,
     },
   };
+
+  React.useEffect(() => {
+    if (data) {
+      setLoading(false);
+      createNotification(
+        "Account created successfully",
+        "Account created successfully now user can login",
+        "success"
+      );
+      router.replace("/account/login");
+    }
+    if (error) {
+      for (let i = 0; i < error.graphQLErrors.length; i++) {
+        const message = error.graphQLErrors[i].message;
+        createNotification("Error Occurred", message, "error");
+      }
+      setLoading(false);
+    }
+  }, [data, error]);
 
   const onSubmit = async (values) => {
     setLoading(true);
@@ -47,6 +57,7 @@ export const Registration = () => {
         "Confirm Password password did not match with Password",
         "error"
       );
+      setLoading(false);
       return;
     }
     if (
@@ -58,14 +69,41 @@ export const Registration = () => {
         "Username name can not contain space or @",
         "error"
       );
+      setLoading(false);
       return;
     }
     console.log(values, image);
-    await uploadImages(image, "image/", setImageUrl);
-    setLoading(false);
-    router.back();
-    // form.resetFields();
-    // setFileList([]);
+
+    const saveUserWithImage = async (image) => {
+      console.log("image: ", image);
+      setImageUrl(image);
+      addUser({
+        variables: {
+          name: values.name,
+          username: values.username,
+          bio: values.bio,
+          email: values.email,
+          password: values.password,
+          profileImage: image,
+        },
+      });
+    };
+
+    if (image) {
+      await uploadImages(image, "profile/", saveUserWithImage, imageUrl);
+    } else {
+      console.log("save user without image");
+      addUser({
+        variables: {
+          name: values.name,
+          username: values.username,
+          bio: values.bio,
+          email: values.email,
+          password: values.password,
+          profileImage: null,
+        },
+      });
+    }
   };
 
   const action = (as) => {

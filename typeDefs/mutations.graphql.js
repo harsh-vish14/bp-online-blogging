@@ -35,11 +35,7 @@ export const Mutations = gql`
       content: String!
     ): DetailsResponseBlog
 
-    addCommentToBlog(
-      blogId: String!
-      message: String!
-      userId: String!
-    ): DetailsResponseComments
+    addCommentToBlog(blogId: String!, message: String!): DetailsResponseComments
 
     resetPassword(id: ID): MessageResponse
 

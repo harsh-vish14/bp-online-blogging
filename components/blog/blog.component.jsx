@@ -103,7 +103,7 @@ export const BlogCompo = ({ blog }) => {
           }}
         />
       </main>
-      <CommentComponent />
+      <CommentComponent blogId={blog._id} />
     </section>
   );
 };

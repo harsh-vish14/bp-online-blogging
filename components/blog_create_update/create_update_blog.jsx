@@ -200,7 +200,7 @@ export const Creat_Update_Blog = ({ blog }) => {
             disabled={content.length === 0 || title.length === 0}
             onClick={EditBlog}
           >
-            Edit Blog
+            Save Edit
           </Button>
         )}
         {isPrivate ? (

@@ -164,7 +164,10 @@ export const commentsByBlogId = async (_, { blogId }) => {
   };
 };
 
-export const addCommentToBlog = async (_, { blogId, message, userId }) => {
+export const addCommentToBlog = async (_, { blogId, message }, { session }) => {
+  if (!session) {
+    throw new ErrorResponse("Invalid authorization", 401);
+  }
   if (!message) {
     throw new ErrorResponse("Message cannot be empty", 400);
   }
@@ -172,6 +175,7 @@ export const addCommentToBlog = async (_, { blogId, message, userId }) => {
   if (!blog) {
     throw new ErrorResponse("Blog not found", 404);
   }
+  const userId = session.user.id;
   const user = await User.findOne({ _id: userId });
   if (!user) {
     throw new ErrorResponse("User not found", 404);

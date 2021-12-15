@@ -13,8 +13,13 @@ export default ({ blogData }) => {
   const [errorFound, setErrorFound] = React.useState(false);
   const router = useRouter();
   React.useEffect(() => {
+    console.log("use effect is running");
     if (!loading) {
-      if (session && String(blogData.creator._id) !== session.user.id) {
+      if (
+        session &&
+        String(blogData.creator._id) !== session.user.id &&
+        blogData.isPrivate
+      ) {
         console.log(String(blogData.creator._id), session.user.id);
         setErrorFound(true);
       } else if (!session) {
@@ -56,7 +61,7 @@ export const getStaticProps = async (context) => {
     {
       title: normalTitle,
     },
-    { comments: 0, createdAt: 0 }
+    { createdAt: 0 }
   ).populate("creator", "_id name username profileImage");
   console.log(blogData?._id, userData?._id);
   if (!blogData || !userData) {

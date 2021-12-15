@@ -181,3 +181,76 @@ export const FORGET_PASSWORD_WITH_TOKEN = gql`
     }
   }
 `;
+
+export const ADD_USER = gql`
+  mutation AddUser(
+    $name: String!
+    $username: String!
+    $bio: String!
+    $email: String!
+    $password: String!
+    $profileImage: String
+  ) {
+    addUser(
+      name: $name
+      username: $username
+      bio: $bio
+      email: $email
+      password: $password
+      profileImage: $profileImage
+    ) {
+      success
+      message
+    }
+  }
+`;
+
+export const GET_COMMENTS_BY_BLOG_ID = gql`
+  query CommentsByBlogId($blogId: String!) {
+    commentsByBlogId(blogId: $blogId) {
+      success
+      comments {
+        commentedBy {
+          username
+          name
+          profileImage
+          id
+        }
+        id
+        message
+        updatedAt
+        createdAt
+      }
+    }
+  }
+`;
+
+export const ADD_COMMENT_IN_BLOG_BY_ID = gql`
+  mutation AddCommentToBlog($blogId: String!, $message: String!) {
+    addCommentToBlog(blogId: $blogId, message: $message) {
+      success
+      message
+      comments {
+        commentedBy {
+          name
+          id
+          username
+          profileImage
+        }
+        id
+        message
+        createdAt
+        updatedAt
+      }
+    }
+  }
+`;
+
+export const DELETE_COMMENT_BY_ID = gql`
+  mutation DeleteComment($commentId: String!) {
+    deleteComment(commentId: $commentId) {
+      success
+      message
+    }
+  }
+`;

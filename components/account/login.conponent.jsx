@@ -51,7 +51,13 @@ export const Login = () => {
             setPassword(e.target.value);
           }}
         />
-        <Button type="primary" block onClick={submit} loading={loading}>
+        <Button
+          type="primary"
+          block
+          onClick={submit}
+          loading={loading}
+          htmlType="submit"
+        >
           Login
         </Button>
         <div className={classes.otherBtn}>
