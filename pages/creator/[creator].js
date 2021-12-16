@@ -1,14 +1,26 @@
-import { getSession, useSession } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { Creator } from "../../components/creator/creator.components";
+import Head from "next/head";
 import { User } from "../../models/user/User";
 
 export default ({ userData }) => {
   const [session, loading] = useSession();
   return (
-    <Creator
-      userData={userData}
-      myProfile={!loading && session && session.user.id == String(userData._id)}
-    />
+    <>
+      <Head>
+        <title>BP / @{userData.username}</title>
+        <meta
+          name="description"
+          content={userData.name + " - " + userData.bio}
+        ></meta>
+      </Head>
+      <Creator
+        userData={userData}
+        myProfile={
+          !loading && session && session.user.id == String(userData._id)
+        }
+      />
+    </>
   );
 };
 
@@ -27,6 +39,7 @@ export const getStaticProps = async (context) => {
   return {
     props: {
       userData: JSON.parse(JSON.stringify(userData)),
+      revalidate: 3600,
     },
   };
 };

@@ -1,6 +1,18 @@
 import React from "react";
 import { Forget } from "../../components/forget/forget.components";
+import Head from "next/head";
 
 export default () => {
-  return <Forget />;
+  return (
+    <>
+      <Head>
+        <title>BP / FORGET PASSWORD</title>
+        <meta
+          name="description"
+          content={"Forget Password to set a new Password to your account"}
+        ></meta>
+      </Head>
+      <Forget />
+    </>
+  );
 };
