@@ -1,6 +1,7 @@
 import { Result, Button } from "antd";
 import Link from "next/link";
 import { AiFillHome } from "react-icons/ai";
+import Head from "next/head";
 
 let Error = ({ statusCode }) => {
   console.log("client side: ", statusCode);
@@ -12,6 +13,11 @@ let Error = ({ statusCode }) => {
   }
   return (
     <>
+      <Head>
+        <title>
+          BP / {statusCode === 404 ? "NOT FOUND" : "ERROR OCCURRED"}
+        </title>
+      </Head>
       <Result
         status={statusCode}
         title={statusCode}

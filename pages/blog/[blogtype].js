@@ -1,10 +1,32 @@
 import { getSession } from "next-auth/client";
 import React from "react";
 import { Creat_Update_Blog } from "../../components/blog_create_update/create_update_blog";
+import Head from "next/head";
 import { Blog } from "../../models/blogs/Blog";
 
-export default ({ blog }) => {
-  return <Creat_Update_Blog blog={blog} />;
+export default ({ blog, blogtype }) => {
+  console.log("CLient: ", blogtype);
+  return (
+    <>
+      <Head>
+        <title>
+          BP /{" "}
+          {blogtype === "create"
+            ? `Create A New Blog`
+            : `Edit - ${blog?.title}`}
+        </title>
+        <meta
+          name="description"
+          content={
+            blogtype === "create"
+              ? "Create A new Blog"
+              : `Edit the blog - ${blog?.title}`
+          }
+        ></meta>
+      </Head>
+      <Creat_Update_Blog blog={blog} />
+    </>
+  );
   // return <div>hello</div>;
 };
 
@@ -20,6 +42,7 @@ export const getServerSideProps = async (context) => {
   if (blogtype === "create") {
     return {
       props: {
+        blogtype,
         blog: null,
       },
     };
@@ -36,6 +59,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
+      blogtype: blogtype,
       blog: JSON.parse(JSON.stringify(blog)),
     },
   };
