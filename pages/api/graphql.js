@@ -19,11 +19,12 @@ const apolloServer = new ApolloServer({
   },
   typeDefs,
   resolvers,
-  // plugins: [
-  //   process.env.NODE_ENV === "production"
-  //     ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-  //     : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-  // ],
+  introspection: process.env.NODE_ENV !== "production",
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+  ],
 });
 
 const startServer = apolloServer.start();
