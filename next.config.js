@@ -12,6 +12,7 @@ module.exports = {
     MESSAGING_SENDING_ID: process.env.MESSAGEING_SENDING_ID,
     APP_ID: process.env.APP_ID,
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    // NODE_ENV: process.env.NODE_ENV,
     EMAIL_API_KEY: process.env.EMAIL_API_KEY,
   },
 };

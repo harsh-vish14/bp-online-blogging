@@ -19,7 +19,8 @@ const apolloServer = new ApolloServer({
   },
   typeDefs,
   resolvers,
-  introspection: process.env.NODE_ENV !== "production",
+  introspection: true,
+  playground: true,
   plugins: [
     process.env.NODE_ENV === "production"
       ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
