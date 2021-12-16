@@ -27,6 +27,7 @@ export const getStaticProps = async (context) => {
   return {
     props: {
       userData: JSON.parse(JSON.stringify(userData)),
+      revalidate: 3600,
     },
   };
 };
