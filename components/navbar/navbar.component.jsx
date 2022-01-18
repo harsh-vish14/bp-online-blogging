@@ -15,7 +15,7 @@ export const Navbar = () => {
       <nav>
         <Link href="/">
           <a>
-            <div className={classes.logo}>PB</div>
+            <div className={classes.logo}>BP</div>
           </a>
         </Link>
       </nav>
