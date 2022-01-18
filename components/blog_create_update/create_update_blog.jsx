@@ -211,7 +211,7 @@ export const Creat_Update_Blog = ({ blog }) => {
               fontSize: "16px",
             }}
             onClick={() => {
-              setIsPrivate(false);
+              setIsPrivate(true);
             }}
           >
             <AiOutlineEyeInvisible /> Private
@@ -224,7 +224,7 @@ export const Creat_Update_Blog = ({ blog }) => {
               fontSize: "16px",
             }}
             onClick={() => {
-              setIsPrivate(true);
+              setIsPrivate(false);
             }}
           >
             <AiOutlineEye /> Public
