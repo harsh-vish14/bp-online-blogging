@@ -55,7 +55,7 @@ export default ({ blogData }) => {
 
 export const getStaticProps = async (context) => {
   const { blog } = context.params;
-  console.log(blog);
+  // console.log(blog);
   if (blog.length < 0) {
     return {
       notFound: true,
