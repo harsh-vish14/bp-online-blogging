@@ -154,7 +154,7 @@ export const Creat_Update_Blog = ({ blog }) => {
     if (response.data) {
       console.log(response.data);
       createNotification(
-        "Blog Update, It will take some time to reflect everywhere, about 1 hour it will take",
+        "Blog Update, It will take some time to reflect everywhere, about 10-11 mins it will take",
         response.data.updateBlog.message,
         "success"
       );
