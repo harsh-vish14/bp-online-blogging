@@ -1,6 +1,10 @@
 module.exports = {
   images: {
-    domains: ["firebasestorage.googleapis.com", "images.unsplash.com"],
+    domains: [
+      "firebasestorage.googleapis.com",
+      "images.unsplash.com",
+      "toppng.com",
+    ],
   },
   env: {
     MONGODB_URI: process.env.MONGODB_URI,

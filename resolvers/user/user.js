@@ -50,11 +50,13 @@ export const createUser = async (
 
     const userDetails = await User.create({
       name,
-      username,
+      username: username.toLowerCase(),
       email,
       password: hashedPassword,
       bio,
-      profileImage,
+      profileImage: profileImage
+        ? profileImage
+        : "https://toppng.com/uploads/preview/instagram-default-profile-picture-11562973083brycehrmyv.png",
     });
     return {
       success: true,

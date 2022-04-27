@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema(
     username: {
       type: String,
       require: [true, "Please provide username"],
+      lowercase: true,
     },
     profileImage: {
       type: String,
