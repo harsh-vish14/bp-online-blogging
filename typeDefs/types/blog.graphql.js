@@ -35,7 +35,7 @@ export const Blog = gql`
     id: ID!
 
     "commented user id"
-    commentedBy: User!
+    commentedBy: User
 
     "message added in comment"
     message: String!

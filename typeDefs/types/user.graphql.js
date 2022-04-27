@@ -3,30 +3,30 @@ import { gql } from "apollo-server-micro";
 export const User = gql`
   type User {
     "user unique mongodb id"
-    id: ID!
+    id: ID
 
     "name of user"
-    name: String!
+    name: String
 
     "username of url of user"
-    username: String!
+    username: String
 
     "profile image of url of user"
-    profileImage: String!
+    profileImage: String
 
     "bio of user"
-    bio: String!
+    bio: String
 
     "user created blogs"
-    blogs: [ID]!
+    blogs: [ID]
 
     "email of user"
-    email: String!
+    email: String
 
     "user created is ISO formate with date and time"
-    createdAt: String!
+    createdAt: String
 
     "user last updated is ISO formate with date and time"
-    updatedAt: String!
+    updatedAt: String
   }
 `;

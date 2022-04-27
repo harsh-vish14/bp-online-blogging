@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       require: [true, "Please provide name"],
       trim: true,
+      lowercase: true,
     },
     username: {
       type: String,

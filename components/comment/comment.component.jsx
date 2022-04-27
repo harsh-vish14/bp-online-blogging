@@ -8,6 +8,8 @@ import moment from "moment";
 import { useMutation } from "react-apollo";
 import Linkify from "react-linkify";
 import Link from "next/link";
+import { createNotification } from "../../utils/createNotification";
+
 import {
   GET_COMMENTS_BY_BLOG_ID,
   ADD_COMMENT_IN_BLOG_BY_ID,
@@ -43,6 +45,7 @@ export const CommentComponent = ({ blogId }) => {
     if (data) {
       setLoading(false);
     }
+    console.log("data: ", data);
     if (error) {
       for (let i = 0; i < error.graphQLErrors.length; i++) {
         const message = error.graphQLErrors[i].message;

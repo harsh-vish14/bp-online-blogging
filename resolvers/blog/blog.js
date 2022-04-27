@@ -158,6 +158,14 @@ export const commentsByBlogId = async (_, { blogId }) => {
   const comments = await Comment.find({ blog: blogId })
     .sort({ updatedAt: -1 })
     .populate("commentedBy");
+
+  // let not_null_comment = [];
+  // for (let i = 0; i <= comments.length; i++) {
+  //   if (comments[i]) {
+  //     not_null_comment.push(comments[i]);
+  //   }
+  // }
+  // console.log(not_null_comment);
   return {
     success: true,
     comments,
