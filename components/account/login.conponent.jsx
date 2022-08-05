@@ -34,32 +34,39 @@ export const Login = () => {
     <div className={classes.form}>
       <div className={classes.formTitle}>login</div>
       <div className={classes.formItems}>
-        <Input
-          placeholder="Email"
-          size="large"
-          onChange={(e) => {
-            setEmail(e.target.value);
+        <form
+          className={classes.formItems}
+          submit={(event) => {
+            event.preventDefault();
           }}
-        />
-        <Input.Password
-          size="large"
-          placeholder="input password"
-          iconRender={(visible) =>
-            visible ? <AiOutlineEye /> : <AiOutlineEyeInvisible />
-          }
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-        />
-        <Button
-          type="primary"
-          block
-          onClick={submit}
-          loading={loading}
-          htmlType="submit"
         >
-          Login
-        </Button>
+          <Input
+            placeholder="Email"
+            size="large"
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+          />
+          <Input.Password
+            size="large"
+            placeholder="input password"
+            iconRender={(visible) =>
+              visible ? <AiOutlineEye /> : <AiOutlineEyeInvisible />
+            }
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <Button
+            type="primary"
+            block
+            onClick={submit}
+            loading={loading}
+            htmlType="submit"
+          >
+            Login
+          </Button>
+        </form>
         <div className={classes.otherBtn}>
           <div>
             <Link href="/forget">Forget Password ?</Link>
